@@ -18,14 +18,14 @@ let elements = {
   board: {
     board: createElement({
       tag: 'div',
-      classes: ['board']
+      classes: ['board', 'row']
     }),
     tiles: new Array(9).fill(null).map((value, index) => {
       return createElement({
         tag: 'div',
-        classes: ['board-tile'],
+        classes: ['board-tile', 'col-4'],
         events: {
-          click: e => tileClick(index, e)
+          click: e => tileClick(index, e.target)
         }
       });
     })
@@ -95,6 +95,9 @@ function renderUpdate() {
 }
 
 function tileClick(index, target) {
+  // Check whether game is active
+  if (data.state !== STATE_ACTIVE) return;
+
   // Check whether this tile is occupied  
   if (data.board[index] !== null) return;
 
@@ -122,19 +125,34 @@ function restartClick() {
   data.player = 'X';
   data.board = new Array(9).fill(null);
   data.state = STATE_ACTIVE;
-  elements.board.tiles.forEach(element => element.textContent = '_')
+  elements.board.tiles.forEach(element => element.textContent = '')
   
   renderUpdate();
 }
 
 
 function renderInitial() {
-  let temp = document.getElementById('temp');
-  temp.appendChild(elements.header.title);
-  temp.appendChild(elements.header.description);
-  temp.appendChild(elements.board.board);
+  let appContainer = createElement({
+    tag: 'div',
+    classes: ['container'],
+    parent: document.getElementById('app')
+  })
+  let appRow = createElement({
+    tag: 'div',
+    classes: ['row', 'justify-content-center'],
+    parent: appContainer
+  })
+  let appCol = createElement({
+    tag: 'div',
+    classes: ['col'],
+    parent: appRow
+  })
+
+  appCol.appendChild(elements.header.title);
+  appCol.appendChild(elements.header.description);
+  appCol.appendChild(elements.board.board);
   elements.board.tiles.forEach(element => elements.board.board.appendChild(element))
-  temp.appendChild(elements.restartButton);
+  appCol.appendChild(elements.restartButton);
 }
 
 renderInitial();

@@ -1,0 +1,12 @@
+.board-tile {
+  height: 10rem;
+  font-size: 6rem;
+  text-align: center;
+  border: 1px solid black;
+  padding: 0.5rem;
+}
+
+.board {
+  width: 30rem;
+  margin: 1rem;
+}
