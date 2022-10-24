@@ -17,13 +17,11 @@ let data = {}
 let elements = {
   board: {
     board: createElement({
-      tag: 'div',
-      classes: ['board', 'row']
+      classes: ['board']
     }),
     tiles: new Array(9).fill(null).map((value, index) => {
       return createElement({
-        tag: 'div',
-        classes: ['board-tile', 'col-4'],
+        classes: ['board-tile'],
         events: {
           click: e => tileClick(index, e.target)
         }
@@ -36,13 +34,12 @@ let elements = {
       textContent: 'Tic-Tac-Toe'
     }),
     description: createElement({
-      tag: 'div',
+      tag: 'h2',
       classes: ['header-description']
     })
   },
   restartButton: createElement({
-    tag: 'div',
-    classes: ['button-restart', 'btn', 'btn-primary'],
+    classes: ['button-restart', 'btn', 'btn-primary', 'btn-lg'],
     textContent: 'Restart Game',
     events: {
       click: restartClick
@@ -51,7 +48,7 @@ let elements = {
 }
 
 function createElement({
-  tag = null,
+  tag = 'div',
   classes = [],
   parent = null,
   events = {},
@@ -132,26 +129,41 @@ function restartClick() {
 
 
 function renderInitial() {
+  // Create app container
   let appContainer = createElement({
-    tag: 'div',
     classes: ['container'],
     parent: document.getElementById('app')
   })
   let appRow = createElement({
-    tag: 'div',
-    classes: ['row', 'justify-content-center'],
+    classes: ['d-flex', 'justify-content-center'],
     parent: appContainer
   })
   let appCol = createElement({
-    tag: 'div',
-    classes: ['col'],
-    parent: appRow
+    parent: appRow,
+    classes: ['text-center']
   })
 
+  // Create board grid
+  let boardRow = createElement({
+    classes: ['row'],
+    parent: elements.board.board
+  })
+  elements.board.tiles.forEach(element => {
+    let containerCol = createElement({
+      classes: ['col-4', 'p-0']
+    })
+    let containerRatio = createElement({
+      classes: ['ratio', 'ratio-1x1']
+    })
+    boardRow.appendChild(containerCol)
+    containerCol.appendChild(containerRatio)
+    containerRatio.appendChild(element)
+  });
+
+  // Append everything to DOM
   appCol.appendChild(elements.header.title);
   appCol.appendChild(elements.header.description);
   appCol.appendChild(elements.board.board);
-  elements.board.tiles.forEach(element => elements.board.board.appendChild(element))
   appCol.appendChild(elements.restartButton);
 }
 
